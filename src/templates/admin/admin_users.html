@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Usuarios - Colegio UDC</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Administrar Usuarios</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre de Usuario</th>
+                    <th>Rol</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.role }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_users') }}" method="post" style="display:inline;">
+                            <input type="hidden" name="user_id" value="{{ usuario._id }}">
+                            <select name="new_role">
+                                <option value="admin" {% if usuario.role == "admin" %}selected{% endif %}>Admin</option>
+                                <option value="profesor" {% if usuario.role == "profesor" %}selected{% endif %}>Profesor</option>
+                                <option value="estudiante" {% if usuario.role == "estudiante" %}selected{% endif %}>Estudiante</option>
+                            </select>
+                            <button  onclick="return confirm('¿Estás seguro de cambiar el rol de este usuario?')" type="submit">Actualizar Rol</button>
+                        </form>
+                        <form action="{{ url_for('delete_user', user_id=usuario._id) }}" method="post" style="display:inline; ">
+                            <button onclick="return confirm('¿Estás seguro de eliminar este usuario?')" type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

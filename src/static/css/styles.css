@@ -1,0 +1,39 @@
+.navbar {
+    background-color: white;
+    color: black;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 20px; /* Añade un poco de espacio a la izquierda para separar del borde */
+}
+
+.navbar-links {
+    display: flex;
+    flex-grow: 1; /* Hace que los enlaces ocupen todo el espacio disponible */
+    justify-content: flex-end; /* Alinea los enlaces a la derecha */
+}
+
+.navbar-links a {
+    color: black;
+    text-decoration: none;
+    padding: 0 20px; /* Espacio entre enlaces */
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .navbar-links {
+        flex-direction: column; /* Cambia la dirección de los enlaces a una columna */
+        justify-content: center; /* Centra los enlaces verticalmente */
+        align-items: center; /* Centra los enlaces horizontalmente */
+    }
+}
+

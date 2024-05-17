@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Colegio UDC</title>
+</head>
+<body>
+    <h1>Panel de {{ session['user']['role'] }}</h1>
+    <p>Bienvenido, {{ session['user']['username'] }}</p>
+    <!-- Aquí puedes agregar enlaces y opciones para gestionar eventos, archivos, etc. -->
+    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+</body>
+</html>
