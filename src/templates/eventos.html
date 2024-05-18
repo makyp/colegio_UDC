@@ -1,52 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eventos - Colegio UDC</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 16px;
-            margin: 16px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .card-header {
-            font-size: 1.25em;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .card-body {
-            margin-bottom: 8px;
-        }
-        .card-footer {
-            font-size: 0.875em;
-            color: #555;
-        }
-    </style>
-</head>
-
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-brand">Colegio UDC</div>
-            <div class="navbar-links">
-                <a href="{{ url_for('quienes_somos') }}">Quienes somos</a>
-                <a href="{{ url_for('mision') }}">Misión</a>
-                <a href="{{ url_for('vision') }}">Visión</a>
-                <a href="{{ url_for('eventos') }}">Eventos</a>
-                <a href="#informacion">Información Institucional</a>
-                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <h1>Eventos</h1>
-        {% if eventos|length == 0 %}
+{% extends "base.html" %}
+{% block title %}Eventos - Colegio UDC{% endblock %}
+{% block header %}Eventos{% endblock %}
+{% block content %}
+{% if eventos|length == 0 %}
         <p>No tenemos eventos agendados</p>
         {% else %}
         {% for evento in eventos %}
@@ -61,8 +17,5 @@
             <div class="card-footer">Publicado el: {{ evento._id.generation_time.strftime('%Y-%m-%d %H:%M:%S') }}</div>
         </div>
         {% endfor %}
-        {% endif %}
-    </div>
-</body>
-
-</html>
+    {% endif %}
+{% endblock %}

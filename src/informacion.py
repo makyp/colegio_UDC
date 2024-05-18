@@ -1,15 +1,19 @@
 
 class Informacion:
-    def __init__(self, quienes_somos, mision, vision):
+    def __init__(self, quienes_somos, mision, vision, telefono, email):
         self.quienes_somos = quienes_somos
         self.mision = mision
         self.vision = vision
+        self.telefono = telefono
+        self.email = email
     
     def formato_doc(self):
         return{
             'quienes_somos': self.quienes_somos,
             'mision': self.mision,
             'vision': self.vision,
+            'telefono': self.telefono,
+            'email': self.email
         }
 
 class Usuario:

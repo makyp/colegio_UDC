@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visión</title>
-</head>
-<body>
-    <h1>Visión</h1>
-    <p>{{ vision.texto }}</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %} Vision - Colegio UDC{% endblock %}
+{% block header %}Vision{% endblock %}
+{% block content %}
+<p>{{ vision.texto }}</p>
+<p>Agregar imagen al lado del texto</p>
+{% endblock %}

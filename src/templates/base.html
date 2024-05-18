@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">Colegio UDC</div>
+            <div class="navbar-links">
+                <a href="{{ url_for('index') }}">Quienes somos</a>
+                <a href="{{ url_for('mision') }}">Misión</a>
+                <a href="{{ url_for('vision') }}">Visión</a>
+                <a href="{{ url_for('eventos') }}">Eventos</a>
+                <a href="{{ url_for('ver_archivos') }}">Archivos Institucionales</a>
+                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>{% block header %}{% endblock %}</h2>
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        <p>Contactanos en el telefono: {{ telefono.texto }} | e-mail: {{ email.texto }}</p>
+    </footer>
+</body>
+</html>

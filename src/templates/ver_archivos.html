@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %} Información institucional - Colegio UDC{% endblock %}
+{% block header %}Información institucional{% endblock %}
+{% block content %}
+<div class="preview-container" id="archivos-container">
+  {% if archivos %}
+    {% for archivo in archivos %}
+      <h3>{{ archivo.filename }}</h3> <!-- Muestra el nombre del archivo -->
+      <embed src="{{ url_for('preview_file', file_id=archivo._id) }}" type="application/pdf" width="100%" height="600px" />
+    {% endfor %}
+  {% else %}
+    <p>No hay archivos disponibles.</p>
+  {% endif %}
+</div>
+{% endblock %}

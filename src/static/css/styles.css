@@ -37,3 +37,25 @@
     }
 }
 
+.card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 16px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-size: 1.25em;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.card-body {
+    margin-bottom: 8px;
+}
+
+.card-footer {
+    font-size: 0.875em;
+    color: #555;
+}

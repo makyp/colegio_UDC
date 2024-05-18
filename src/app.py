@@ -9,9 +9,9 @@ from config import *
 
 con_bd = Conexion()
 app = Flask(__name__)
-app.secret_key = "clave_secreta"
+app.secret_key = "trwtrtqe3eeeea"
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max file size: 16MB
-app.config['UPLOAD_EXTENSIONS'] = ['.pdf']
+app.config['UPLOAD_EXTENSIONS'] = ['.pdf', '.jpg', '.jpeg', '.png', '.gif']
 # Configuración de Flask-Session
 app.config['SESSION_TYPE'] = 'filesystem'
 
@@ -21,9 +21,24 @@ ROLES = {
     "estudiante": 2
 }
 fs = gridfs.GridFS(con_bd)
+colection_informacion = con_bd['Informacion']
+informacion = colection_informacion.find_one()
+if informacion:
+    texto_quienes_somos = informacion.get('quienes_somos', 'Información no disponible')
+    texto_telefono =informacion.get('telefono', 'Información no disponible')
+    texto_email = informacion.get('email', 'Informacion no disponible')
+    texto_mision = informacion.get('mision', 'Información no disponible')
+    texto_vision = informacion.get('vision', 'Información no disponible')
+else:
+    texto_quienes_somos = 'Información no disponible'
+    texto_telefono ='Información no disponible'
+    texto_email = 'Informacion no disponible'
+    texto_mision = 'Informacion no disponible'
+    texto_vision = 'Informacion no disponible'
+
 @app.route('/')
 def index():
-    return redirect(url_for('quienes_somos'))
+    return render_template('quienes_somos.html', quienes_somos={'texto': texto_quienes_somos}, telefono={'texto': texto_telefono}, email ={'texto': texto_email})
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
@@ -69,28 +84,31 @@ def admin_dashboard():
         return render_template('admin/admin_dashboard.html')
     else:
         return redirect(url_for('login'))
+def cargar_informacion():
+    colection_informacion = con_bd['Informacion']
+    if colection_informacion.count_documents({}) == 0:
+            quienes_somos = "Información por defecto de quiénes somos"
+            mision = "Información por defecto de misión"
+            vision = "Información por defecto de visión"
+            telefono = "3158425715"
+            email = "correoUDC@colegioUDC.edu.co"
+            object_informacion = Informacion(quienes_somos, mision, vision, telefono, email)
+            colection_informacion.insert_one(object_informacion.formato_doc())
 
 @app.route('/editar_informacion', methods=['GET', 'POST'])
 def editar_informacion_colegio():
     if 'user' in session and session['user']['role'] == "admin":
         colection_informacion = con_bd['Informacion']
-        
-        # Verificar si la colección está vacía e insertar un documento si es necesario
-        if colection_informacion.count_documents({}) == 0:
-            quienes_somos = "Información por defecto de quiénes somos"
-            mision = "Información por defecto de misión"
-            vision = "Información por defecto de visión"
-            object_informacion = Informacion(quienes_somos, mision, vision)
-            colection_informacion.insert_one(object_informacion.formato_doc())
-
         if request.method == 'POST':
             quienes_somos = request.form.get('quienes_somos')
             mision = request.form.get('mision')
             vision = request.form.get('vision')
-            if quienes_somos and mision and vision:
+            telefono = request.form.get('telefono')
+            email = request.form.get('email')
+            if quienes_somos and mision and vision and telefono and email:
                 colection_informacion.update_one(
                     {}, 
-                    {'$set': {'quienes_somos': quienes_somos, 'mision': mision, 'vision': vision}}
+                    {'$set': {'quienes_somos': quienes_somos, 'mision': mision, 'vision': vision, 'telefono': telefono, 'email': email}}
                 )
                 return redirect(url_for('admin_dashboard'))
             else:
@@ -174,94 +192,85 @@ def eventos():
     colection_eventos = con_bd['Eventos']
     eventos_cursor = colection_eventos.find()
     eventos = list(eventos_cursor)
-    return render_template('eventos.html', eventos=eventos)
-
+    return render_template('eventos.html', eventos=eventos, quienes_somos={'texto': texto_quienes_somos}, telefono={'texto': texto_telefono}, email ={'texto': texto_email})
+# Rutas de subida y previsualización de archivos e imágenes
 @app.route('/archivos_institucionales')
 def archivos_institucionales():
     if 'user' in session and session['user']['role'] == "admin":
-        return render_template('admin/archivos_institucionales.html')
+        archivos = list(fs.find())
+        return render_template('admin/archivos_institucionales.html', archivos=archivos)
     else:
         return redirect(url_for('login'))
-    
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
-        if file and file.filename.endswith('.pdf'):
-            filename = secure_filename(file.filename)
-            file_id = fs.put(file, filename=filename)
-            print("File ID:", file_id)
+        if file and any(file.filename.endswith(ext) for ext in app.config['UPLOAD_EXTENSIONS']):
+            filename = request.form['filename']
+            content_type = file.content_type
+            file_id = fs.put(file, filename=filename, content_type=content_type)
             return redirect(url_for('archivos_institucionales'))
         else:
             return "No se pudo cargar el archivo"
     return render_template('admin/upload.html')
 
-# Ruta para mostrar la lista de archivos y previsualizarlos
+
 @app.route('/archivos')
 def listar_archivos():
-    archivos = list(con_bd.fs.files.find())  # Obtener la lista de archivos
+    archivos = list(con_bd.fs.files.find())  
     return render_template('admin/lista_archivos.html', archivos=archivos)
+
+@app.route('/ver_archivos')
+def ver_archivos():
+    archivos = list(con_bd.fs.files.find())  
+    return render_template('ver_archivos.html', archivos=archivos, telefono={'texto': texto_telefono}, email ={'texto': texto_email})
 
 @app.route('/preview/<file_id>')
 def preview_file(file_id):
-    archivo = fs.get(file_id)
-    return send_file(io.BytesIO(archivo.read()), mimetype=archivo.content_type)
-from flask import request, redirect, url_for
+    try:
+        archivo = fs.get(ObjectId(file_id))
+        return send_file(
+            io.BytesIO(archivo.read()),
+            mimetype=archivo.content_type,
+            download_name=archivo.filename
+        )
+    except gridfs.errors.NoFile:
+        return "Error al obtener el archivo: no chunk #0"
+    except Exception as e:
+        return f"Error al obtener el archivo: {str(e)}"
 
 @app.route('/delete/<file_id>', methods=['POST'])
 def delete_file(file_id):
-    if request.method == 'POST':
-        if 'user' in session and session['user']['role'] == "admin":
-            try:
-                fs.delete(file_id)
-                return redirect(url_for('listar_archivos'))
-            except Exception as e:
-                return f"Error al eliminar el archivo: {str(e)}"
-        else:
-            return redirect(url_for('login'))
-
-
-@app.route('/quienes_somos')
-def quienes_somos():
-    colection_informacion = con_bd['Informacion']
-    informacion = colection_informacion.find_one()
-    if informacion:
-        texto_quienes_somos = informacion.get('quienes_somos', 'Información no disponible')
+    if 'user' in session and session['user']['role'] == "admin":
+        try:
+            fs.delete(ObjectId(file_id))
+            return redirect(url_for('archivos_institucionales'))
+        except Exception as e:
+            return f"Error al eliminar el archivo: {str(e)}"
     else:
-        texto_quienes_somos = 'Información no disponible'
-    return render_template('quienes_somos.html', quienes_somos={'texto': texto_quienes_somos})
+        return redirect(url_for('login'))
 
 @app.route('/mision')
 def mision():
-    colection_informacion = con_bd['Informacion']
-    informacion = colection_informacion.find_one()
-    if informacion:
-        texto_mision = informacion.get('mision', 'Información no disponible')
-    else:
-        texto_mision = 'Información no disponible'
-    return render_template('mision.html', mision={'texto': texto_mision})
+    return render_template('mision.html', mision={'texto': texto_mision}, telefono={'texto': texto_telefono}, email ={'texto': texto_email})
 
 @app.route('/vision')
 def vision():
-    colection_informacion = con_bd['Informacion']
-    informacion = colection_informacion.find_one()
-    if informacion:
-        texto_vision = informacion.get('vision', 'Información no disponible')
-    else:
-        texto_vision = 'Información no disponible'
-    return render_template('vision.html', vision={'texto': texto_vision})
+    return render_template('vision.html', vision={'texto': texto_vision},telefono={'texto': texto_telefono}, email ={'texto': texto_email} )
 
 @app.route('/profesor_dashboard')
 def profesor_dashboard():
-    return render_template('profesor_dashboard.html')
+    return render_template('profesor/profesor_dashboard.html')
 
 @app.route('/estudiante_dashboard')
 def estudiante_dashboard():
-    return render_template('estudiante_dashboard.html')
+    return render_template('estudiante/estudiante_dashboard.html')
 
 @app.errorhandler(BuildError)
 def handle_build_error(error):
     return "Error: Could not build URL for endpoint 'dashboard'", 500
 
 if __name__ == '__main__':
+    cargar_informacion()
     app.run(debug=True, port=5555)
