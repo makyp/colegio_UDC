@@ -4,30 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS desde CDNJS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>{% block title %}{% endblock %}</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .container-flex {
+            flex: 1;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <div class="navbar-brand">Colegio UDC</div>
-            <div class="navbar-links">
-                <a href="{{ url_for('index') }}">Quienes somos</a>
-                <a href="{{ url_for('mision') }}">Misión</a>
-                <a href="{{ url_for('vision') }}">Visión</a>
-                <a href="{{ url_for('eventos') }}">Eventos</a>
-                <a href="{{ url_for('ver_archivos') }}">Archivos Institucionales</a>
-                <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Colegio UDC" style="height: 40px; margin-right: 10px;">
+                Colegio UDC
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Quienes somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mision') }}">Misión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('vision') }}">Visión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('eventos') }}">Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ver_archivos') }}">Información Institucional</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Iniciar Sesión</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
-    <div class="container">
-        <h2>{% block header %}{% endblock %}</h2>
-        {% block content %}{% endblock %}
+    <div class="container-flex">
+        <div class="container mt-4">
+            <h2>{% block header %}{% endblock %}</h2>
+            {% block content %}{% endblock %}
+        </div>
     </div>
     <footer>
-        <p>Contactanos en el telefono: {{ telefono.texto }} | e-mail: {{ email.texto }}</p>
+        <div class="container">
+            <p>Contáctanos en el teléfono: <i class="fas fa-phone"></i> {{ telefono.texto }} | e-mail: <i class="fas fa-envelope"></i> {{ email.texto }}</p>
+        </div>
     </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

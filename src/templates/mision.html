@@ -1,7 +1,22 @@
 {% extends "base.html" %}
-{% block title %} Mision - Colegio UDC{% endblock %}
-{% block header %}Mision{% endblock %}
+{% block title %} Misión - Colegio UDC {% endblock %}
+{% block header %}{% endblock %}
 {% block content %}
-<p>{{ mision.texto }}</p>
-<p>Agregar imagen al lado del texto</p>
+<div class="container mt-8">
+    <div class="card shadow">
+        <div class="card-header">
+            <h2>Misión</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>{{ mision.texto }}</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://pixabay.com/get/g781627c1f532e1e533c426d32595483f61bc96b47f5c78c9699f4fb8d987a384305fed125b86f6e451ad52b800ada5ce463f20d3b035edc081a025d6b7361d85_1280.jpg" alt="Misión" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

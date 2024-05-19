@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Eventos - Colegio UDC{% endblock %}
-{% block header %}Eventos{% endblock %}
+{% block header %}Eventos <i class="fas fa-calendar-alt"></i>{% endblock %}
 {% block content %}
-{% if eventos|length == 0 %}
-        <p>No tenemos eventos agendados</p>
-        {% else %}
-        {% for evento in eventos %}
-        <div class="card">
-            <div class="card-header">
-                <p><strong>Fecha:</strong> {{ evento.fecha }} <strong>Hora:</strong> {{ evento.hora }} </p>
+<div class="container mt-4">
+    {% if eventos|length == 0 %}
+        <p class="alert alert-info">No tenemos eventos agendados</p>
+    {% else %}
+        <div class="row">
+            {% for evento in eventos %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <strong>Fecha:</strong> {{ evento.fecha }} <br> <strong>Hora:</strong> {{ evento.hora }} </p>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+                        <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+                    </div>
+                    <div class="card-footer"> <i class="fas fa-calendar-alt"></i> Publicado el: {{ evento._id.generation_time.strftime('%Y-%m-%d %H:%M:%S') }}</div>
+                </div>
             </div>
-            <div class="card-body">
-                <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
-                <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
-            </div>
-            <div class="card-footer">Publicado el: {{ evento._id.generation_time.strftime('%Y-%m-%d %H:%M:%S') }}</div>
+            {% endfor %}
         </div>
-        {% endfor %}
     {% endif %}
+</div>
 {% endblock %}

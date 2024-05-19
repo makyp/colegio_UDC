@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 {% block title %} Vision - Colegio UDC{% endblock %}
-{% block header %}Vision{% endblock %}
+{% block header %}{% endblock %}
 {% block content %}
-<p>{{ vision.texto }}</p>
-<p>Agregar imagen al lado del texto</p>
+<div class="container mt-8">
+    <div class="card shadow">
+        <div class="card-header">
+            <h2>Visión</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>{{ vision.texto }}</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://pixabay.com/get/gaa4fbc533636d0003a5a247b90ae00bbb4f8cfcca940323dbe888c77dd6acfe3dc2d53f519387284938e5e8e897b38e4ca7dcce35cf976695f67d0c69196b83e_1280.jpg" alt="Vision" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

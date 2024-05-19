@@ -4,20 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Colegio UDC</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('https://pixabay.com/get/g36fa31c6f0eac7496e2a086dd996ec5d135fb1bba29933518f2ba8fb19d2d5b7a12fbce3efe98b6cb41154e3cf44c4e4258ae79918083e4eff731bf0cc717d59_1280.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+        .btn-custom {
+            background-color: #5693e2;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #1f70cc;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
-    <form action="{{ url_for('login') }}" method="POST">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        <button type="submit">Iniciar sesión</button>
-        <a href="{{ url_for('index') }}">Volver</a>
-    </form>
-    <!-- <p>¿No tienes una cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a></p> -->
-</body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <h1 class="text-center">Inicia Sesión</h1>
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    <form action="{{ url_for('login') }}" method="POST">
+                        <div class="form-group">
+                            <label for="username">Usuario:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-custom btn-block">Acceder</button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block">Volver</a>
+                    </form>
+                    <!-- <p class="text-center mt-3">¿No tienes una cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a></p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
 </html>

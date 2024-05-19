@@ -2,14 +2,24 @@
 {% block title %} Información institucional - Colegio UDC{% endblock %}
 {% block header %}Información institucional{% endblock %}
 {% block content %}
-<div class="preview-container" id="archivos-container">
-  {% if archivos %}
-    {% for archivo in archivos %}
-      <h3>{{ archivo.filename }}</h3> <!-- Muestra el nombre del archivo -->
-      <embed src="{{ url_for('preview_file', file_id=archivo._id) }}" type="application/pdf" width="100%" height="600px" />
-    {% endfor %}
-  {% else %}
-    <p>No hay archivos disponibles.</p>
-  {% endif %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="preview-container" id="archivos-container">
+                {% if archivos %}
+                    {% for archivo in archivos %}
+                        <div class="mb-4">
+                            <h4>{{ archivo.filename }}</h4>
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <embed class="embed-responsive-item" src="{{ url_for('preview_file', file_id=archivo._id) }}" type="application/pdf" />
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No hay archivos disponibles.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
