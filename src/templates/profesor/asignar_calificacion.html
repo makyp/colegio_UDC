@@ -1,0 +1,28 @@
+{% extends "profesor/base_profesor.html" %}
+{% block title %} Calificaciones{% endblock %}
+{% block header %}Calificaciones{% endblock %}
+{% block content %}
+<form action="{{ url_for('asignar_calificacion') }}" method="POST">
+    <div class="form-group">
+        <label for="asignatura">Asignatura:</label>
+        <select name="asignatura" id="asignatura" class="form-control" required>
+            {% for materia in materias %}
+            <option value="{{ materia }}">{{ materia }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="estudiante">Estudiante:</label>
+        <select name="estudiante" id="estudiante" class="form-control" required>
+            {% for estudiante in estudiantes %}
+            <option value="{{ estudiante['nombre'] }}">{{ estudiante['nombre'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="calificacion">Calificación:</label>
+        <input type="number" name="calificacion" id="calificacion" class="form-control" min="0" max="5" step="0.1" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Subir Calificación</button>
+</form>
+{% endblock %}

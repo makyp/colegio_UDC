@@ -1,0 +1,23 @@
+{% extends "estudiante/base_estudiante.html" %}
+{% block title %} Mis calificaiones{% endblock %}
+{% block header %}<p>Calificaiones obtenidas</p>{% endblock %}
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Asignatura</th>
+            <th>Docente</th>
+            <th>Calificación</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for asignatura in asignaturas %}
+            <tr>
+                <td>{{ asignatura.asignatura }}</td>
+                <td>{{ asignatura.docente }}</td>
+                <td>{{ asignatura.calificacion }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

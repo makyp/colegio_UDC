@@ -96,14 +96,14 @@ class Docente:
         }
 
 class Asignatura:
-     def __init__(self, nombre, docente, estudiante, calificacion):
-         self.nombre = nombre
+     def __init__(self, asignatura, docente, estudiante, calificacion):
+         self.asignatura = asignatura
          self.docente = docente
          self.estudiante = estudiante
          self.calificacion = calificacion
      def fomato_doc(self):
         return{
-            'nombre': self.nombre,
+            'asignatura': self.asignatura,
             'docente': self.docente,
             'estudiante': self.estudiante,
             'calificacion': self.calificacion

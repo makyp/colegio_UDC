@@ -1,0 +1,35 @@
+{% extends "admin/admin_base.html" %}
+{% block title %} Ver Calificaciones{% endblock %}
+{% block header %}Calificaciones subidas{% endblock %}
+{% block content %}
+<form action="{{ url_for('ver_calificaciones') }}" method="post">
+    <label for="asignatura">Filtrar por Asignatura:</label>
+    <select name="asignatura" id="asignatura">
+        <option value="Todas">Todas</option>
+        {% for asignatura in asignaturas %}
+            <option value="{{ asignatura }}">{{ asignatura }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filtrar</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Asignatura</th>
+            <th>Estudiante</th>
+            <th>Docente</th>
+            <th>Calificación</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for calificacion in calificaciones %}
+            <tr>
+                <td>{{ calificacion.asignatura }}</td>
+                <td>{{ calificacion.estudiante }}</td>
+                <td>{{ calificacion.docente }}</td>
+                <td>{{ calificacion.calificacion }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -68,7 +68,7 @@ def registro():
                 objeto_estudiante = Estudiante(username, role, nombre, documento, correo, telefono, grado)
                 colection_estudiantes.insert_one(objeto_estudiante.fomato_doc())
             else:
-                objeto_usuario = Usuario(username, password, role , nombre)      
+                objeto_usuario = Usuario(username, password, role , nombre)     
             colection_usuarios.insert_one(objeto_usuario.formato_doc())            
             return redirect(url_for('admin_dashboard'))
     return render_template('inicio_sesion/registro.html')
@@ -210,6 +210,48 @@ def admin_eventos():
     else:
         return redirect(url_for('login'))
 
+@app.route('/ver_perfiles')
+def ver_perfiles():
+    collection_docentes = con_bd['Docentes']
+    collection_estudiantes = con_bd['Estudiantes']
+
+    filtro_tipo = request.args.get('tipo', 'all')
+
+    if filtro_tipo == 'docentes':
+        docentes = list(collection_docentes.find())
+        estudiantes = []
+    elif filtro_tipo == 'estudiantes':
+        docentes = []
+        estudiantes = list(collection_estudiantes.find())
+    else:
+        docentes = list(collection_docentes.find())
+        estudiantes = list(collection_estudiantes.find())
+
+    return render_template('admin/ver_perfiles.html', docentes=docentes, estudiantes=estudiantes, filtro_tipo=filtro_tipo)
+
+from flask import request
+
+@app.route('/ver_calificaciones', methods=['GET', 'POST'])
+def ver_calificaciones():
+    if 'user' in session and session['user']['role'] == 'admin':
+        collection_asignaturas = con_bd['Asignaturas']
+
+        if request.method == 'POST':
+            asignatura_filtrada = request.form['asignatura']
+            if asignatura_filtrada == 'Todas':
+                calificaciones = list(collection_asignaturas.find())
+            else:
+                calificaciones = list(collection_asignaturas.find({'asignatura': asignatura_filtrada}))
+        else:
+            calificaciones = list(collection_asignaturas.find())
+
+        asignaturas = collection_asignaturas.distinct('asignatura')
+        
+        return render_template('admin/ver_calificaciones.html', calificaciones=calificaciones, asignaturas=asignaturas)
+    else:
+        return redirect(url_for('login'))
+
+
 @app.route('/editar_evento/<evento_id>', methods=['GET', 'POST'])
 def editar_evento(evento_id):
     if 'user' in session and session['user']['role'] == "admin":
@@ -350,10 +392,98 @@ def ver_estudiantes():
     
     return render_template('profesor/ver_estudiantes.html', estudiantes=estudiantes)
 
+@app.route('/asignar_calificacion', methods=['GET', 'POST'])
+def asignar_calificacion():
+    if 'user' in session and session['user']['role'] == 'profesor':
+        collection_docentes = con_bd['Docentes']
+        collection_estudiantes = con_bd['Estudiantes']
+        collection_asignaturas = con_bd['Asignaturas']  # Asegúrate de tener esta colección
+
+        docente = collection_docentes.find_one({"username": session['user']['username']})
+        materias = docente.get('materias', [])
+        estudiantes = list(collection_estudiantes.find())
+
+        if request.method == 'POST':
+            asignatura = request.form['asignatura']
+            estudiante = request.form['estudiante']
+            calificacion = request.form['calificacion']
+            objeto_asignatura = Asignatura(asignatura, docente['nombre'], estudiante, float(calificacion))
+            collection_asignaturas.insert_one(objeto_asignatura.fomato_doc())
+
+            return redirect(url_for('profesor_dashboard'))
+
+        return render_template('profesor/asignar_calificacion.html', materias=materias, estudiantes=estudiantes)
+    else:
+        return redirect(url_for('login'))
+
+from flask import request
+
+@app.route('/ver_notas_subidas', methods=['GET'])
+def ver_notas_subidas():
+    if 'user' in session and session['user']['role'] == 'profesor':
+        collection_asignaturas = con_bd['Asignaturas']
+        docente_username = session['user']['nombre']
+        notas_subidas = list(collection_asignaturas.find({'docente': docente_username}))
+        return render_template('profesor/ver_notas_subidas.html', notas_subidas=notas_subidas)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/editar_nota/<nota_id>', methods=['GET', 'POST'])
+def editar_nota(nota_id):
+    if 'user' in session and session['user']['role'] == 'profesor':
+        collection_asignaturas = con_bd['Asignaturas']
+
+        if request.method == 'POST':
+            nueva_calificacion = request.form['nueva_calificacion']
+            collection_asignaturas.update_one({'_id': ObjectId(nota_id)}, {'$set': {'calificacion': float(nueva_calificacion)}})
+            return redirect(url_for('ver_notas_subidas'))
+        else:
+            nota = collection_asignaturas.find_one({'_id': ObjectId(nota_id)})
+            return render_template('profesor/editar_nota.html', nota=nota)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/eliminar_nota/<nota_id>', methods=['POST'])
+def eliminar_nota(nota_id):
+    if 'user' in session and session['user']['role'] == 'profesor':
+        collection_asignaturas = con_bd['Asignaturas']
+        collection_asignaturas.delete_one({'_id': ObjectId(nota_id)})
+        return redirect(url_for('ver_notas_subidas'))
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route('/estudiante_dashboard')
 def estudiante_dashboard():
     return render_template('estudiante/estudiante_dashboard.html')
+
+@app.route('/ver_notas')
+def ver_notas():
+    if 'user' in session and session['user']['role'] == 'estudiante':
+        collection_asignaturas = con_bd['Asignaturas']
+        collection_docentes = con_bd['Docentes']
+        estudiante_username = session['user']['nombre']
+
+        todas_asignaturas = ['matemáticas', 'español', 'ciencias', 'sociales']
+        asignaturas_data = []
+        for asignatura in todas_asignaturas:
+            docente_asignado = collection_docentes.find_one({'materias': {'$in': [asignatura]}})
+            docente_nombre = docente_asignado['nombre'] if docente_asignado else 'Sin asignar'
+            calificacion_asignatura = collection_asignaturas.find_one({'estudiante': estudiante_username, 'asignatura': asignatura})
+            if calificacion_asignatura:
+                calificacion = calificacion_asignatura['calificacion']
+            else:
+                calificacion = 'Sin calificación'
+            asignaturas_data.append({
+                'asignatura': asignatura,
+                'docente': docente_nombre,
+                'calificacion': calificacion
+            })
+        return render_template('estudiante/ver_notas.html', asignaturas=asignaturas_data)
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route('/ver_perfil_estudiante/<username>')
 def ver_perfil_estudiante(username):
@@ -379,6 +509,13 @@ def editar_perfil_estudiante(username):
         )
         return redirect(url_for('estudiante_dashboard'))  # Redirigir al dashboard del estudiante
     return render_template('estudiante/editar_perfil_estudiante.html', estudiante=estudiante)
+
+
+@app.route('/ver_perfiles_docentes')
+def ver_perfiles_docentes():
+    collection_docentes = con_bd['Docentes']
+    docentes = list(collection_docentes.find())
+    return render_template('estudiante/ver_perfiles_docentes.html', docentes=docentes)
 
 @app.errorhandler(BuildError)
 def handle_build_error(error):

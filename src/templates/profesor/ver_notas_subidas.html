@@ -1,0 +1,30 @@
+{% extends "profesor/base_profesor.html" %}
+{% block title %} Notas Subidas{% endblock %}
+{% block header %}Notas Subidas{% endblock %}
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Asignatura</th>
+            <th>Estudiante</th>
+            <th>Calificación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for nota in notas_subidas %}
+            <tr>
+                <td>{{ nota.asignatura }}</td>
+                <td>{{ nota.estudiante }}</td>
+                <td>{{ nota.calificacion }}</td>
+                <td>
+                    <a href="{{ url_for('editar_nota', nota_id=nota._id) }}">Editar</a>
+                    <form action="{{ url_for('eliminar_nota', nota_id=nota._id) }}" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta nota?');">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

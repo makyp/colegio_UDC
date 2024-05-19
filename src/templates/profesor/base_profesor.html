@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">Panel de {{ session['user']['role'] }}</div>
+            <div class="navbar-links">
+                <a href="{{ url_for('profesor_dashboard') }}">Incio</a>
+                <a href="{{ url_for('ver_perfil_docente', username=session['user']['username']) }}">Perfil</a>
+                <a href="{{ url_for('ver_estudiantes') }}">Ver Estudiantes</a>
+                <a href="{{ url_for('asignar_calificacion') }}">Subir Notas</a>
+                <a href="{{ url_for('ver_notas_subidas') }}">Ver notas</a>
+                <a href="{{ url_for('index') }}">Cerrar sesión</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>{% block header %}{% endblock %}</h2>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

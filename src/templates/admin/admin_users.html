@@ -1,85 +1,77 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrar Usuarios - Colegio UDC</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Administrar Usuarios</h1>
-        <form action="{{ url_for('admin_users') }}" method="get">
-            <label for="filter">Filtrar por rol:</label>
-            <select id="filter" name="filter">
-                <option value="all" {% if filter == "all" %}selected{% endif %}>Todos</option>
-                <option value="admin" {% if filter == "admin" %}selected{% endif %}>Administrador</option>
-                <option value="profesor" {% if filter == "profesor" %}selected{% endif %}>Profesor</option>
-                <option value="estudiante" {% if filter == "estudiante" %}selected{% endif %}>Estudiante</option>
-            </select>
-            <button type="submit">Aplicar</button>
-        </form>
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Nombre</th>
-                    <th>Rol</th>
-                    <th>Grado o Materias</th>
-                    <th>Modificar</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.username }}</td>
-                    <td> {{ usuario.nombre }} </td>
-                    <td>{{ usuario.role }}</td>
-                    <td>
-                        {% if usuario.role == 'profesor' %}
-                            {% for materia in usuario.materias %}
-                                {{ materia }}
-                                {% if not loop.last %}, {% endif %}
-                            {% endfor %}
-                        {% elif usuario.role == 'estudiante' %}
-                            {{ usuario.grado }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <form action="{{ url_for('admin_users') }}" method="post" style="display:inline;">
-                            <input type="hidden" id="username" name="username" value="{{ usuario.username }}">
-                            {% if usuario.role == 'profesor' %}
-                            <label for="materias_{{ usuario.username }}">Materias:</label>
-                            <select id="materias_{{ usuario.username }}" name="materias" multiple>
-                                <option value="matematicas" {% if 'matematicas' in usuario.materias %}selected{% endif %}>Matemáticas</option>
-                                <option value="español" {% if 'español' in usuario.materias %}selected{% endif %}>español</option>
-                                <option value="ciencias" {% if 'ciencias' in usuario.materias %}selected{% endif %}>Ciencias</option>
-                                <option value="sociales" {% if 'sociales' in usuario.materias %}selected{% endif %}>Sociales</option>
-                            </select><br>
-                            {% elif usuario.role == 'estudiante' %}
-                            <label for="grado_{{ usuario.username }}">Grado:</label>
-                            <select id="grado_{{ usuario.username }}" name="grado">
-                                <option value="sexto" {% if usuario.grado == 'sexto' %}selected{% endif %}>Sexto</option>
-                                <option value="septimo" {% if usuario.grado == 'septimo' %}selected{% endif %}>Septimo</option>
-                                <option value="octavo" {% if usuario.grado == 'octavo' %}selected{% endif %}>Octavo</option>
-                                <option value="noveno" {% if usuario.grado == 'noveno' %}selected{% endif %}>Noveno</option>
-                                <option value="decimo" {% if usuario.grado == 'decimo' %}selected{% endif %}>Decimo</option>
-                                <option value="once" {% if usuario.grado == 'once' %}selected{% endif %}>Once</option>
-                            </select><br>
-                            {% endif %}
-                    </td>
-                    <td>
-                        <button onclick="return confirm('¿Estás seguro de aplicar estos cambios?')" type="submit">Actualizar</button>
-                        </form>
-                        <form action="{{ url_for('delete_user', username=usuario.username) }}" method="post" style="display:inline;">
-                            <button onclick="return confirm('¿Estás seguro de eliminar este usuario?')" type="submit">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+{% extends "admin/admin_base.html" %}
+{% block title %} Administrar Usuarios - Colegio UDC{% endblock %}
+{% block header %}Administrar Usuarios{% endblock %}
+{% block content %}
+<form action="{{ url_for('admin_users') }}" method="get">
+    <label for="filter">Filtrar por rol:</label>
+    <select id="filter" name="filter">
+        <option value="all" {% if filter == "all" %}selected{% endif %}>Todos</option>
+        <option value="admin" {% if filter == "admin" %}selected{% endif %}>Administrador</option>
+        <option value="profesor" {% if filter == "profesor" %}selected{% endif %}>Profesor</option>
+        <option value="estudiante" {% if filter == "estudiante" %}selected{% endif %}>Estudiante</option>
+    </select>
+    <button type="submit">Aplicar</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th>Grado o Materias</th>
+            <th>Modificar</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.username }}</td>
+            <td> {{ usuario.nombre }} </td>
+            <td>{{ usuario.role }}</td>
+            <td>
+                {% if usuario.role == 'profesor' %}
+                    {% for materia in usuario.materias %}
+                        {{ materia }}
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% elif usuario.role == 'estudiante' %}
+                    {{ usuario.grado }}
+                {% endif %}
+            </td>
+            <td>
+                <form action="{{ url_for('admin_users') }}" method="post" style="display:inline;">
+                    <input type="hidden" id="username" name="username" value="{{ usuario.username }}">
+                    {% if usuario.role == 'profesor' %}
+                    <label for="materias_{{ usuario.username }}">Materias:</label>
+                    <select id="materias_{{ usuario.username }}" name="materias" multiple>
+                        <option value="matematicas" {% if 'matematicas' in usuario.materias %}selected{% endif %}>Matemáticas</option>
+                        <option value="español" {% if 'español' in usuario.materias %}selected{% endif %}>Español</option>
+                        <option value="ciencias" {% if 'ciencias' in usuario.materias %}selected{% endif %}>Ciencias</option>
+                        <option value="sociales" {% if 'sociales' in usuario.materias %}selected{% endif %}>Sociales</option>
+                    </select><br>
+                    {% elif usuario.role == 'estudiante' %}
+                    <label for="grado_{{ usuario.username }}">Grado:</label>
+                    <select id="grado_{{ usuario.username }}" name="grado">
+                        <option value="sexto" {% if usuario.grado == 'sexto' %}selected{% endif %}>Sexto</option>
+                        <option value="septimo" {% if usuario.grado == 'septimo' %}selected{% endif %}>Septimo</option>
+                        <option value="octavo" {% if usuario.grado == 'octavo' %}selected{% endif %}>Octavo</option>
+                        <option value="noveno" {% if usuario.grado == 'noveno' %}selected{% endif %}>Noveno</option>
+                        <option value="decimo" {% if usuario.grado == 'decimo' %}selected{% endif %}>Decimo</option>
+                        <option value="once" {% if usuario.grado == 'once' %}selected{% endif %}>Once</option>
+                    </select><br>
+                    {% endif %}
+            </td>
+            <td>
+                <button onclick="return confirm('¿Estás seguro de aplicar estos cambios?')" type="submit">Actualizar</button>
+                </form>
+                <form action="{{ url_for('delete_user', username=usuario.username) }}" method="post" style="display:inline;">
+                    <button onclick="return confirm('¿Estás seguro de eliminar este usuario?')" type="submit">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

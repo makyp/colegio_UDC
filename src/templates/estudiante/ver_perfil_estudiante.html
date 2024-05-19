@@ -1,25 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil del Estudiante</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-
-<body>
-    <div class="container">
-        <h1>Perfil del Estudiante</h1>
-        <p><strong>Usuario:</strong> {{ estudiante.username }}</p>
-        <p><strong>Rol:</strong> {{ estudiante.role }}</p>
-        <p><strong>Nombre:</strong> {{ estudiante.nombre }}</p>
-        <p><strong>Documento:</strong> {{ estudiante.documento }}</p>
-        <p><strong>Correo:</strong> {{ estudiante.correo }}</p>
-        <p><strong>Teléfono:</strong> {{ estudiante.telefono }}</p>
-        <p><strong>Grado:</strong> {{ estudiante.grado }}</p>
-        <a href="{{ url_for('editar_perfil_estudiante', username=estudiante.username) }}">Editar</a>
-    </div>
-</body>
-
-</html>
+{% extends "estudiante/base_estudiante.html" %}
+{% block title %} Mi pefil{% endblock %}
+{% block header %}<p>Perfil</p>{% endblock %}
+{% block content %}
+<p> <strong>Usuario:</strong> {{ estudiante.username }}</p>
+<p><strong>Rol:</strong> {{ estudiante.role }}</p>
+<p><strong>Nombre:</strong> {{ estudiante.nombre }}</p>
+<p><strong>Documento:</strong> {{ estudiante.documento }}</p>
+<p><strong>Correo:</strong> {{ estudiante.correo }}</p>
+<p><strong>Teléfono:</strong> {{ estudiante.telefono }}</p>
+<p><strong>Grado:</strong> {{ estudiante.grado }}</p>
+<a href="{{ url_for('editar_perfil_estudiante', username=estudiante.username) }}">Actualizar mis datos</a>
+{% endblock %}

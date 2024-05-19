@@ -1,24 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Colegio UDC</title>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-brand">Colegio UDC</div>
-            <div class="navbar-links">
-                <a href="{{ url_for('ver_perfil_estudiante', username=session['user']['username']) }}">Perfil</a>
-                <a href="">Docentes</a>
-                <a href="">Ver calificaciones</a>
-                <a href="{{ url_for('index') }}">Cerrar sesión</a>
-            </div>
-        </div>
-    </nav> 
-    <h1>Panel de {{ session['user']['role'] }}</h1>
-    <p>Bienvenido, {{ session['user']['username'] }}</p>
-    
-</body>
-</html>
+{% extends "estudiante/base_estudiante.html" %}
+{% block title %} Inicio{% endblock %}
+{% block header %}<p>Bienvenido, {{ session['user']['username'] }}</p>{% endblock %}
+{% block content %}
+<p>Que acciones deseas realizar</p>
+{% endblock %}
+

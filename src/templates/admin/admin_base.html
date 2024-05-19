@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">Panel de {{ session['user']['role'] }}</div>
+            <a href="{{ url_for('admin_dashboard') }}">Inico</a>
+            <a href="{{ url_for('editar_informacion_colegio') }}">Editar Información</a>
+            <a href="{{ url_for('registro') }}">Registrar nuevo usuario</a>
+            <a href="{{ url_for('admin_users') }}">Administrar Usuarios</a>
+            <a href="{{ url_for('ver_perfiles') }}">Ver Perfiles</a>
+            <a href="{{ url_for('ver_calificaciones') }}">Ver calificaciones</a>
+            <a href="{{ url_for('archivos_institucionales') }}">Información institucional</a>
+            <a href="{{ url_for('admin_eventos') }}">Eventos</a>
+            <a href="{{ url_for('index') }}">Cerrar sesión</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>{% block header %}{% endblock %}</h2>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Evento</title>
-</head>
-<body>
-    <h1>Editar Evento</h1>
-    <form method="POST" action="{{ url_for('editar_evento', evento_id=evento._id) }}">
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" value="{{ evento.fecha }}" required><br>
-        <label for="hora">Hora:</label>
-        <input type="time" id="hora" name="hora" value="{{ evento.hora }}" required><br>
-        <label for="lugar">Lugar:</label>
-        <input type="text" id="lugar" name="lugar" value="{{ evento.lugar }}" required><br>
-        <label for="descripcion">Descripción:</label>
-        <textarea id="descripcion" name="descripcion" required>{{ evento.descripcion }}</textarea><br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
-</body>
-</html>
+{% extends "admin/admin_base.html" %}
+{% block title %} Editar Evento{% endblock %}
+{% block header %}Editar Evento{% endblock %}
+{% block content %}
+<form method="POST" action="{{ url_for('editar_evento', evento_id=evento._id) }}">
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" value="{{ evento.fecha }}" required><br>
+    <label for="hora">Hora:</label>
+    <input type="time" id="hora" name="hora" value="{{ evento.hora }}" required><br>
+    <label for="lugar">Lugar:</label>
+    <input type="text" id="lugar" name="lugar" value="{{ evento.lugar }}" required><br>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" required>{{ evento.descripcion }}</textarea><br>
+    <button type="submit">Guardar Cambios</button>
+</form>
+{% endblock %}

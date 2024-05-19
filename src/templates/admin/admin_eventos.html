@@ -1,50 +1,44 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrar Eventos</title>
-</head>
-<body>
-    <h1>Administrar Eventos</h1>
-    <form method="POST" action="{{ url_for('admin_eventos') }}">
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" required><br>
-        <label for="hora">Hora:</label>
-        <input type="time" id="hora" name="hora" required><br>
-        <label for="lugar">Lugar:</label>
-        <input type="text" id="lugar" name="lugar" required><br>
-        <label for="descripcion">Descripción:</label>
-        <textarea id="descripcion" name="descripcion" required></textarea><br>
-        <button type="submit">Agregar Evento</button>
-    </form>
-    <h2>Eventos Existentes</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Lugar</th>
-                <th>Descripción</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for evento in eventos %}
-            <tr>
-                <td>{{ evento.fecha }}</td>
-                <td>{{ evento.hora }}</td>
-                <td>{{ evento.lugar }}</td>
-                <td>{{ evento.descripcion }}</td>
-                <td>
-                    <a href="{{ url_for('editar_evento', evento_id=evento._id) }}">Editar</a>
-                    <form action="{{ url_for('eliminar_evento', evento_id=evento._id) }}" method="POST" style="display:inline;">
-                        <button type="submit" onclick="return confirm('¿Está seguro de eliminar este evento?');">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "admin/admin_base.html" %}
+{% block title %} Administrar Eventos{% endblock %}
+{% block header %}Administrar Eventos{% endblock %}
+{% block content %}
+<form method="POST" action="{{ url_for('admin_eventos') }}">
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" required><br>
+    <label for="hora">Hora:</label>
+    <input type="time" id="hora" name="hora" required><br>
+    <label for="lugar">Lugar:</label>
+    <input type="text" id="lugar" name="lugar" required><br>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" required></textarea><br>
+    <button type="submit">Agregar Evento</button>
+</form>
+<h2>Eventos Existentes</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Lugar</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evento in eventos %}
+        <tr>
+            <td>{{ evento.fecha }}</td>
+            <td>{{ evento.hora }}</td>
+            <td>{{ evento.lugar }}</td>
+            <td>{{ evento.descripcion }}</td>
+            <td>
+                <a href="{{ url_for('editar_evento', evento_id=evento._id) }}">Editar</a>
+                <form action="{{ url_for('eliminar_evento', evento_id=evento._id) }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('¿Está seguro de eliminar este evento?');">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

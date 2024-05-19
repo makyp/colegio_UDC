@@ -1,54 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "profesor/base_profesor.html" %}
+{% block title %} Listado de Estudiantes{% endblock %}
+{% block header %}Listado de Estudiantes{% endblock %}
+{% block content %}
+<form action="{{ url_for('ver_estudiantes') }}" method="get">
+    <label for="grado_filter">Filtrar por grado:</label>
+    <select name="grado_filter" id="grado_filter">
+        <option value="all">Todos</option>
+        <option value="sexto">Sexto</option>
+        <option value="septimo">Septimo</option>
+        <option value="octavo">Octavo</option>
+        <option value="noveno">Noveno</option>
+        <option value="decimo">Decimo</option>
+        <option value="once">Once</option>
+    </select>
+    <button type="submit">Filtrar</button>
+</form>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Estudiantes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-
-<body>
-    <div class="container">
-        <h1>Listado de Estudiantes</h1>
-        <!-- Formulario para filtrar por grado -->
-        <form action="{{ url_for('ver_estudiantes') }}" method="get">
-            <label for="grado_filter">Filtrar por grado:</label>
-            <select name="grado_filter" id="grado_filter">
-                <option value="all">Todos</option>
-                <option value="sexto">Sexto</option>
-                <option value="septimo">Septimo</option>
-                <option value="octavo">Octavo</option>
-                <option value="noveno">Noveno</option>
-                <option value="decimo">Decimo</option>
-                <option value="once">Once</option>
-            </select>
-            <button type="submit">Filtrar</button>
-        </form>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Documento</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Grado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for estudiante in estudiantes %}
-                <tr>
-                    <td>{{ estudiante.nombre }}</td>
-                    <td>{{ estudiante.documento }}</td>
-                    <td>{{ estudiante.correo }}</td>
-                    <td>{{ estudiante.telefono }}</td>
-                    <td>{{ estudiante.grado }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
-
-</html>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Grado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for estudiante in estudiantes %}
+        <tr>
+            <td>{{ estudiante.nombre }}</td>
+            <td>{{ estudiante.documento }}</td>
+            <td>{{ estudiante.correo }}</td>
+            <td>{{ estudiante.telefono }}</td>
+            <td>{{ estudiante.grado }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

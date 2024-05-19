@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Colegio UDC</title>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-brand">Colegio UDC</div>
-            <a href="{{ url_for('editar_informacion_colegio') }}">Editar Información</a>
-            <a href="{{ url_for('registro') }}">Registrar nuevo usuario</a>
-            <a href="{{ url_for('admin_users') }}">Administrar Usuarios</a>
-            <a href="">Ver Perfiles</a>
-            <a href="#informacion">Ver calificaciones</a>
-            <a href="{{ url_for('archivos_institucionales') }}">Información institucional</a>
-            <a href="{{ url_for('admin_eventos') }}">Eventos</a>
-            <a href="{{ url_for('index') }}">Cerrar sesión</a>
-        </div>
-    </nav>
-    <h1>Panel de {{ session['user']['role'] }}</h1>
-    <p>Bienvenido, {{ session['user']['username'] }}</p>
-</body>
-</html>
+{% extends "admin/admin_base.html" %}
+{% block title %} Inicio{% endblock %}
+{% block header %}<p>Bienvenido, {{ session['user']['username'] }}</p>{% endblock %}
+{% block content %}
+<p>Accede a las configuraciones</p>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "estudiante/base_estudiante.html" %}
+{% block title %} Docentes{% endblock %}
+{% block header %}<p>Docentes del colegio</p>{% endblock %}
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Materias</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for docente in docentes %}
+        <tr>
+            <td>{{ docente.nombre }}</td>
+            <td>{{ docente.correo }}</td>
+            <td>{{ docente.telefono }}</td>
+            <td>{{ ', '.join(docente.materias) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
