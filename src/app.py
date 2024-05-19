@@ -1,5 +1,5 @@
 import io
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file
 from werkzeug.utils import secure_filename
 from werkzeug.routing import BuildError
 from bson import ObjectId
@@ -467,16 +467,15 @@ def ver_notas():
 
         todas_asignaturas = ['matemáticas', 'español', 'ciencias', 'sociales']
         asignaturas_data = []
-        for asignatura in todas_asignaturas:
-            docente_asignado = collection_docentes.find_one({'materias': {'$in': [asignatura]}})
+        for nombre_asignatura in todas_asignaturas:
+            calificacion_asignatura = collection_asignaturas.find_one({'estudiante': estudiante_username, 'asignatura': nombre_asignatura})
+            calificacion = calificacion_asignatura['calificacion'] if calificacion_asignatura else 'Sin calificación'
+
+            docente_asignado = collection_docentes.find_one({'materias': nombre_asignatura})
             docente_nombre = docente_asignado['nombre'] if docente_asignado else 'Sin asignar'
-            calificacion_asignatura = collection_asignaturas.find_one({'estudiante': estudiante_username, 'asignatura': asignatura})
-            if calificacion_asignatura:
-                calificacion = calificacion_asignatura['calificacion']
-            else:
-                calificacion = 'Sin calificación'
+
             asignaturas_data.append({
-                'asignatura': asignatura,
+                'asignatura': nombre_asignatura,
                 'docente': docente_nombre,
                 'calificacion': calificacion
             })
@@ -507,7 +506,8 @@ def editar_perfil_estudiante(username):
                 "telefono": telefono
             }}
         )
-        return redirect(url_for('estudiante_dashboard'))  # Redirigir al dashboard del estudiante
+        flash('¡Los datos se actualizaron correctamente!', 'success')
+        return redirect(url_for('editar_perfil_estudiante', username=username))
     return render_template('estudiante/editar_perfil_estudiante.html', estudiante=estudiante)
 
 

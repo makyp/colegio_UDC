@@ -1,23 +1,38 @@
 {% extends "estudiante/base_estudiante.html" %}
-{% block title %} Mis calificaiones{% endblock %}
-{% block header %}<p>Calificaiones obtenidas</p>{% endblock %}
+{% block title %} Mis calificaciones {% endblock %}
+{% block header %}<h2 class="text-center">Calificaciones obtenidas</h2>{% endblock %}
 {% block content %}
-<table>
-    <thead>
-        <tr>
-            <th>Asignatura</th>
-            <th>Docente</th>
-            <th>Calificación</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for asignatura in asignaturas %}
-            <tr>
-                <td>{{ asignatura.asignatura }}</td>
-                <td>{{ asignatura.docente }}</td>
-                <td>{{ asignatura.calificacion }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th style="text-align: center;">Asignatura</th>
+                    <th style="text-align: center;">Docente</th>
+                    <th style="text-align: center;">Calificación</th>
+                    <th style="text-align: center;">Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asignatura in asignaturas %}
+                    <tr>
+                        <td style="text-align: center;">{{ asignatura.asignatura }}</td>
+                        <td style="text-align: center;">{{ asignatura.docente }}</td>
+                        <td style="text-align: center;">{{ asignatura.calificacion }}</td>
+                        <td style="text-align: center;">{% if asignatura.calificacion is defined and asignatura.calificacion is number %}
+                            {% if asignatura.calificacion >= 3 %}
+                                <span style="color: green;">Aprobado</span>
+                            {% else %}
+                                <span style="color: red;">No Aprobado</span>
+                            {% endif %}
+                        {% else %}
+                            Sin calificación
+                        {% endif %}</td>  
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>
 {% endblock %}

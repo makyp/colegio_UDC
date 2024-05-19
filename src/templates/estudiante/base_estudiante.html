@@ -4,28 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            width: 100px; 
+            padding-top: 56px; 
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .list-group-item {
+            padding: 10px 0;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .main-content {
+            margin-left: 100px;
+        }
+        .text-center {
+        text-align: center;
+        }
+        .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        border-radius: 10px;
+        }
+
+        .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+        padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar">
-        <nav class="navbar">
-            <div class="container">
-                <div class="navbar-brand">Panel de {{ session['user']['role'] }}</div>
-                <div class="navbar-links">
-                    <a href="{{ url_for('estudiante_dashboard') }}">Inicio</a>
-                    <a href="{{ url_for('ver_perfil_estudiante', username=session['user']['username']) }}">Perfil</a>
-                    <a href="{{ url_for('ver_perfiles_docentes') }}">Docentes</a>
-                    <a href="{{ url_for('ver_notas') }}">Mis calificaciones</a>
-                    <a href="{{ url_for('index') }}">Cerrar sesión</a>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <div class="list-group list-group-flush">
+                        <a href="{{ url_for('estudiante_dashboard') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-home"></i> <br> Inicio
+                        </a>
+                        <a href="{{ url_for('ver_perfil_estudiante', username=session['user']['username']) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user"></i> <br> Perfil
+                        </a>
+                        <a href="{{ url_for('ver_perfiles_docentes') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users"></i> <br> Docentes
+                        </a>
+                        <a href="{{ url_for('ver_notas') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-clipboard-list"></i> <br> Mis Notas
+                        </a>
+                        <a href="{{ url_for('index') }}" class="list-group-item list-group-item-action logout">
+                            <i class="fas fa-sign-out-alt"></i> <br> Cerrar sesión
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </nav> 
-    </nav>
-    <div class="container">
-        <h2>{% block header %}{% endblock %}</h2>
-        {% block content %}{% endblock %}
+            </nav>
+            <main class="col-md-10 col-lg-10 ms-sm-auto main-content">
+                <div class="container mt-4">
+                    <h2>{% block header %}{% endblock %}</h2>
+                    <div class="content">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

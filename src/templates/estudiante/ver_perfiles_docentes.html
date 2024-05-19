@@ -1,25 +1,30 @@
 {% extends "estudiante/base_estudiante.html" %}
-{% block title %} Docentes{% endblock %}
-{% block header %}<p>Docentes del colegio</p>{% endblock %}
+{% block title %} Docentes {% endblock %}
+{% block header %}<h2 class="text-center">Mis profesores</h2>{% endblock %}
 {% block content %}
-<table>
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
-            <th>Materias</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for docente in docentes %}
-        <tr>
-            <td>{{ docente.nombre }}</td>
-            <td>{{ docente.correo }}</td>
-            <td>{{ docente.telefono }}</td>
-            <td>{{ ', '.join(docente.materias) }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Materias</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for docente in docentes %}
+                <tr>
+                    <td>{{ docente.nombre }}</td>
+                    <td>{{ docente.correo }}</td>
+                    <td>{{ docente.telefono }}</td>
+                    <td>{{ ', '.join(docente.materias) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
+

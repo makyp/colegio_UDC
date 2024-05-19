@@ -1,7 +1,9 @@
 {% extends "estudiante/base_estudiante.html" %}
 {% block title %} Inicio{% endblock %}
-{% block header %}<p>Bienvenido, {{ session['user']['username'] }}</p>{% endblock %}
+{% block header %}<p class="text-center">Bienvenido, {{ session['user']['username'] }}</p>{% endblock %}
 {% block content %}
-<p>Que acciones deseas realizar</p>
+<div class="text-center">
+    <p>Que acciones deseas realizar</p>
+    <img src="https://estudiante.upc.edu.pe/_nuxt/gif-landing.05412619.gif" alt="Estudiante" class="img-fluid">
+</div>
 {% endblock %}
-
