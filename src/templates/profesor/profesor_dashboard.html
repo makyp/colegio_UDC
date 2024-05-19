@@ -11,8 +11,7 @@
             <div class="navbar-brand">Colegio UDC</div>
             <div class="navbar-links">
                 <a href="{{ url_for('ver_perfil_docente', username=session['user']['username']) }}">Perfil</a>
-                <a href="">Materias Asignadas</a>
-                <a href="">Ver Estudiantes</a>
+                <a href="{{ url_for('ver_estudiantes') }}">Ver Estudiantes</a>
                 <a href="">Subir Notas</a>
                 <a href="{{ url_for('index') }}">Cerrar sesión</a>
             </div>

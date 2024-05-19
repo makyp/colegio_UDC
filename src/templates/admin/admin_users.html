@@ -24,7 +24,7 @@
                 <tr>
                     <th>User</th>
                     <th>Nombre</th>
-                    <th>Rol Actual</th>
+                    <th>Rol</th>
                     <th>Grado o Materias</th>
                     <th>Modificar</th>
                     <th>Opciones</th>
@@ -49,12 +49,6 @@
                     <td>
                         <form action="{{ url_for('admin_users') }}" method="post" style="display:inline;">
                             <input type="hidden" id="username" name="username" value="{{ usuario.username }}">
-                            <label for="new_role_{{ usuario.username }}">Rol:</label>
-                            <select id="new_role_{{ usuario.username }}" name="new_role">
-                                <option value="admin" {% if usuario.role=="admin" %}selected{% endif %}>Admin</option>
-                                <option value="profesor" {% if usuario.role=="profesor" %}selected{% endif %}>Profesor</option>
-                                <option value="estudiante" {% if usuario.role=="estudiante" %}selected{% endif %}>Estudiante</option>
-                            </select><br>
                             {% if usuario.role == 'profesor' %}
                             <label for="materias_{{ usuario.username }}">Materias:</label>
                             <select id="materias_{{ usuario.username }}" name="materias" multiple>

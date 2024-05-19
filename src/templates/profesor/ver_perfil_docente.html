@@ -11,16 +11,19 @@
 <body>
     <div class="container">
         <h1>Perfil del Docente</h1>
-        <p><strong>Usuario:</strong> {{ docente.user }}</p>
+        <p><strong>Usuario:</strong> {{ docente.username }}</p>
         <p><strong>Rol:</strong> {{ docente.role }}</p>
         <p><strong>Nombre:</strong> {{ docente.nombre }}</p>
         <p><strong>Documento:</strong> {{ docente.documento }}</p>
         <p><strong>Correo:</strong> {{ docente.correo }}</p>
         <p><strong>Teléfono:</strong> {{ docente.telefono }}</p>
-        <p><strong>Materias:</strong>
-           
-        </p>
-        <a href="{{ url_for('editar_perfil_docente', username=docente.user) }}">Editar</a>
+        <p><strong>Materias:</strong></p>
+        <ul>
+            {% for materia in docente.materias %}
+                <li>{{ materia }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('editar_perfil_docente', username=docente.username) }}">Editar</a>
     </div>
 </body>
 

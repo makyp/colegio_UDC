@@ -55,14 +55,14 @@ class Eventos:
 
         }
 class Estudiante:
-    def __init__(self, username, role, nombre = None, documento = None, correo = None, telefono = None, curso= None ):
+    def __init__(self, username, role, nombre = None, documento = None, correo = None, telefono = None, grado= None ):
         self.username = username
         self.role = role
         self.nombre = nombre
         self.documento = documento
         self.correo = correo
         self.telefono = telefono
-        self.curso = curso
+        self.grado = grado
     def fomato_doc(self):
         return{
             'username': self.username,
@@ -71,7 +71,7 @@ class Estudiante:
             'documento': self.documento,
             'correo': self.correo,
             'telefono': self.telefono,
-            'curso': self.curso
+            'grado': self.grado
         }
         
 
