@@ -18,7 +18,35 @@
             <option value="profesor">Profesor</option>
             <option value="estudiante">Estudiante</option>
         </select><br><br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        <label for="documento">Documento:</label>
+        <input type="text" id="documento" name="documento" required><br><br>
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" name="correo" required><br><br>
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" required><br><br>
+        {% if rol == 'profesor' %}
+        <label for="materias">Materias:</label>
+        <select id="materias" name="materias" multiple>
+            <option value="matematicas">Matemáticas</option>
+            <option value="lengua">Español</option>
+            <option value="ciencias">Ciencias</option>
+            <option value="sociales">Sociales</option>
+        </select><br><br>
+        {% elif rol == 'estudiante' %}
+        <label for="grado">Grado:</label>
+        <select id="grado" name="grado">
+            <option value="sexto">Sexto</option>
+            <option value="septimo">Septimo</option>
+            <option value="octavo">Octavo</option>
+            <option value="noveno">Noveno</option>
+            <option value="decimo">Decimo</option>
+            <option value="once">Once</option>
+        </select><br><br>
+        {% endif %}
         <button type="submit">Registrar</button>
     </form>
 </body>
+
 </html>

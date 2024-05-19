@@ -6,9 +6,21 @@
     <title>Dashboard - Colegio UDC</title>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">Colegio UDC</div>
+            <div class="navbar-links">
+                <a href="{{ url_for('ver_perfil_docente', username=session['user']['username']) }}">Perfil</a>
+                <a href="">Materias Asignadas</a>
+                <a href="">Ver Estudiantes</a>
+                <a href="">Subir Notas</a>
+                <a href="{{ url_for('index') }}">Cerrar sesión</a>
+            </div>
+        </div>
+    </nav>
+   
     <h1>Panel de {{ session['user']['role'] }}</h1>
     <p>Bienvenido, {{ session['user']['username'] }}</p>
-    <!-- Aquí puedes agregar enlaces y opciones para gestionar eventos, archivos, etc. -->
-    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    
 </body>
 </html>

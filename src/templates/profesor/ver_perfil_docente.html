@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Docente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Perfil del Docente</h1>
+        <p><strong>Usuario:</strong> {{ docente.user }}</p>
+        <p><strong>Rol:</strong> {{ docente.role }}</p>
+        <p><strong>Nombre:</strong> {{ docente.nombre }}</p>
+        <p><strong>Documento:</strong> {{ docente.documento }}</p>
+        <p><strong>Correo:</strong> {{ docente.correo }}</p>
+        <p><strong>Teléfono:</strong> {{ docente.telefono }}</p>
+        <p><strong>Materias:</strong>
+           
+        </p>
+        <a href="{{ url_for('editar_perfil_docente', username=docente.user) }}">Editar</a>
+    </div>
+</body>
+
+</html>
