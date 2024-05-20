@@ -378,7 +378,8 @@ def editar_perfil_docente(username):
                 "telefono": telefono
             }}
         )
-        return redirect(url_for('profesor_dashboard')) 
+        flash('¡Los datos se actualizaron correctamente!', 'success')
+        return redirect(url_for('editar_perfil_docente', username=username)) 
     return render_template('profesor/editar_perfil_docente.html', docente=docente)
 @app.route('/ver_estudiantes')
 def ver_estudiantes():
