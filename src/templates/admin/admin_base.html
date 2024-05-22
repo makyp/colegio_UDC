@@ -10,26 +10,57 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
     <script src="http://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+    <style>
+        /* Estilos personalizados aquí */
+    </style>
 </head>
 
 <body>
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <div class="navbar-brand">Panel de {{ session['user']['role'] }}</div>
-            <a href="{{ url_for('admin_dashboard') }}">Inico</a>
-            <a href="{{ url_for('editar_informacion_colegio') }}">Editar Información</a>
-            <a href="{{ url_for('registro') }}">Registrar nuevo usuario</a>
-            <a href="{{ url_for('admin_users') }}">Administrar Usuarios</a>
-            <a href="{{ url_for('ver_perfiles') }}">Ver Perfiles</a>
-            <a href="{{ url_for('ver_calificaciones') }}">Ver calificaciones</a>
-            <a href="{{ url_for('archivos_institucionales') }}">Información institucional</a>
-            <a href="{{ url_for('admin_eventos') }}">Eventos</a>
-            <a href="{{ url_for('index') }}">Cerrar sesión</a>
+            <a class="navbar-brand" href="#">{{ session['user']['role'] }} Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('editar_informacion_colegio') }}">Editar Información</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('registro') }}">Registrar nuevo usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_users') }}">Administrar Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ver_perfiles') }}">Ver Perfiles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ver_calificaciones') }}">Ver calificaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('archivos_institucionales') }}">Información institucional</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_eventos') }}">Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container">
         <h2>{% block header %}{% endblock %}</h2>
         {% block content %}{% endblock %}
     </div>
+    <script>
+        // Código JavaScript para funcionalidad adicional
+    </script>
 </body>
 </html>

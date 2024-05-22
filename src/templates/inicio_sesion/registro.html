@@ -1,45 +1,65 @@
 {% extends "admin/admin_base.html" %}
 {% block title %} Registro - Colegio UDC{% endblock %}
-{% block header %}<p>Registro de Nuevo Usuario</p>{% endblock %}
+{% block header %}<p class="text-center text-primary">Registro de Nuevo Usuario</p>{% endblock %}
 {% block content %}
-<form action="{{ url_for('registro') }}" method="POST">
-    <label for="username">Usuario:</label>
-    <input type="text" id="username" name="username" required><br><br>
-    <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    <label for="role">Rol:</label>
-    <select id="role" name="role" required>
-        <option value="admin">Administrador</option>
-        <option value="profesor">Profesor</option>
-        <option value="estudiante">Estudiante</option>
-    </select><br><br>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required><br><br>
-    <label for="documento">Documento:</label>
-    <input type="number" id="documento" name="documento" required><br><br>
-    <label for="correo">Correo:</label>
-    <input type="email" id="correo" name="correo" required><br><br>
-    <label for="telefono">Teléfono:</label>
-    <input type="number" id="telefono" name="telefono" required><br><br>
-    {% if rol == 'profesor' %}
-    <label for="materias">Materias:</label>
-    <select id="materias" name="materias" multiple>
-        <option value="matematicas">Matemáticas</option>
-        <option value="lengua">Español</option>
-        <option value="ciencias">Ciencias</option>
-        <option value="sociales">Sociales</option>
-    </select><br><br>
-    {% elif rol == 'estudiante' %}
-    <label for="grado">Grado:</label>
-    <select id="grado" name="grado">
-        <option value="sexto">Sexto</option>
-        <option value="septimo">Septimo</option>
-        <option value="octavo">Octavo</option>
-        <option value="noveno">Noveno</option>
-        <option value="decimo">Decimo</option>
-        <option value="once">Once</option>
-    </select><br><br>
-    {% endif %}
-    <button type="submit">Registrar</button>
-</form>
+<div class="container">
+    <form action="{{ url_for('registro') }}" method="POST" class="mt-3">
+        <div class="mb-3">
+            <label for="username" class="form-label">Usuario:</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Rol:</label>
+            <select id="role" name="role" class="form-select" required>
+                <option value="admin">Administrador</option>
+                <option value="profesor">Profesor</option>
+                <option value="estudiante">Estudiante</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="documento" class="form-label">Documento:</label>
+            <input type="number" id="documento" name="documento" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo:</label>
+            <input type="email" id="correo" name="correo" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono:</label>
+            <input type="number" id="telefono" name="telefono" class="form-control" required>
+        </div>
+        {% if rol == 'profesor' %}
+        <div class="mb-3">
+            <label for="materias" class="form-label">Materias:</label>
+            <select id="materias" name="materias" class="form-select" multiple>
+                <option value="matematicas">Matemáticas</option>
+                <option value="lengua">Español</option>
+                <option value="ciencias">Ciencias</option>
+                <option value="sociales">Sociales</option>
+            </select>
+        </div>
+        {% elif rol == 'estudiante' %}
+        <div class="mb-3">
+            <label for="grado" class="form-label">Grado:</label>
+            <select id="grado" name="grado" class="form-select">
+                <option value="sexto">Sexto</option>
+                <option value="septimo">Septimo</option>
+                <option value="octavo">Octavo</option>
+                <option value="noveno">Noveno</option>
+                <option value="decimo">Decimo</option>
+                <option value="once">Once</option>
+            </select>
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+</div>
 {% endblock %}
