@@ -1,6 +1,8 @@
 {% extends "admin/admin_base.html" %}
-{% block title %} Inicio{% endblock %}
+{% block title %}Inicio{% endblock %}
 {% block header %}<p>Bienvenido, {{ session['user']['username'] }}</p>{% endblock %}
 {% block content %}
-<p>Accede a las configuraciones</p>
+<div class="alert alert-info" role="alert">
+    Accede a las configuraciones a través del menú de navegación.
+</div>
 {% endblock %}
