@@ -2,10 +2,18 @@
 {% block title %} Editar calificaciones{% endblock %}
 {% block header %}Editar calificaciones{% endblock %}
 {% block content %}
-<form action="{{ url_for('editar_nota', nota_id=nota._id) }}" method="post">
-    <label for="nueva_calificacion">Nueva Calificación:</label>
-    <input type="number" name="nueva_calificacion" id="nueva_calificacion" value="{{ nota.calificacion }}" required>
-    <button type="submit">Guardar Cambios</button>
-</form>
-<a href="{{ url_for('ver_notas_subidas') }}">Cancelar</a>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form action="{{ url_for('editar_nota', nota_id=nota._id) }}" method="post" class="mt-4">
+                <div class="mb-3">
+                    <label for="nueva_calificacion" class="form-label">Nueva Calificación:</label>
+                    <input type="number" name="nueva_calificacion" id="nueva_calificacion" value="{{ nota.calificacion }}" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a href="{{ url_for('ver_notas_subidas') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

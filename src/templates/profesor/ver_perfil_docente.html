@@ -1,23 +1,28 @@
 {% extends "profesor/base_profesor.html" %}
 {% block title %} Perfil del Docente{% endblock %}
-{% block header %}<p class="text-center">Perfil del Docente</p>{% endblock %}
+{% block header %}<h2 class="text-center">Perfil del Docente</h2>{% endblock %}
 {% block content %}
-<div class="card mx-auto" style="max-width: 500px;">
-    <div class="card-body">
-        <div class="text-center mb-4">
-            <img src="https://pixabay.com/get/g20789e441695a733500c81ce0906bd1a8237fd76fb204b995ea42556a7d8be4a172d3bbe6ab262aa7947afb7e8f3abb3_1280.png" alt="Perfil" class="rounded-circle" style="width: 100px;">
+<div class="container">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <!-- Espacio para imagen grande -->
+                <!-- Reemplaza esta etiqueta con la imagen que desees -->
+                <img src="tu_imagen.jpg" alt="Perfil" class="rounded-circle" style="width: 100px;">
+            </div>
+            <p class="card-text"><strong>Usuario:</strong> {{ docente.username }}</p>
+            <p class="card-text"><strong>Documento:</strong> {{ docente.documento }}</p>
+            <p class="card-text"><strong>Correo:</strong> {{ docente.correo }}</p>
+            <p class="card-text"><strong>Teléfono:</strong> {{ docente.telefono }}</p>
+            <p class="card-text"><strong>Asignatura:</strong> {{ docente.asignatura }}</p>
+            <ul class="list-group">
+                <!-- Lista de materias -->
+                {% for materia in docente.materias %}
+                <li class="list-group-item">{{ materia }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('editar_perfil_docente', username=docente.username) }}" class="btn btn-primary mt-3">Actualizar mis datos</a>
         </div>
-        <p class="card-text"><strong>Usuario:</strong> {{ docente.username }}</p>
-        <p class="card-text"><strong>Documento:</strong> {{ docente.documento }}</p>
-        <p class="card-text"><strong>Correo:</strong> {{ docente.correo }}</p>
-        <p class="card-text"><strong>Teléfono:</strong> {{ docente.telefono }}</p>
-        <p class="card-text"><strong>Grado:</strong> {{ docente.grado }}</p>
-        <ul>
-            {% for materia in docente.materias %}
-                <li>{{ materia }}</li>
-            {% endfor %}
-        </ul>
-        <a href="{{ url_for('editar_perfil_docente', username=docente.username) }}" class="btn btn-primary">Actualizar mis datos</a>
     </div>
 </div>
 {% endblock %}
