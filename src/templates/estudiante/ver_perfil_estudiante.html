@@ -5,7 +5,7 @@
 <div class="card mx-auto mt-4" style="max-width: 500px;">
     <div class="card-body">
         <div class="text-center mb-4">
-            <img src="https://pixabay.com/get/g20789e441695a733500c81ce0906bd1a8237fd76fb204b995ea42556a7d8be4a172d3bbe6ab262aa7947afb7e8f3abb3_1280.png" alt="Perfil" class="rounded-circle" style="width: 100px;">
+            <img src="{{ url_for('static', filename='images/perfil_estudiante.png') }}" alt="Perfil" class="rounded-circle" style="width: 150px;">
         </div>
         <p class="card-text"><strong>Usuario:</strong> {{ estudiante.username }}</p>
         <p class="card-text"><strong>Documento:</strong> {{ estudiante.documento }}</p>

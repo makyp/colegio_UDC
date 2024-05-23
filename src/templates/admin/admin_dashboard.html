@@ -1,13 +1,19 @@
 {% extends "admin/admin_base.html" %}
-{% block title %} Inicio{% endblock %}
+{% block title %}Inicio{% endblock %}
 {% block header %}
 <p class="fs-4">Bienvenido, {{ session['user']['username'] }}</p>
 {% endblock %}
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Accede a las configuraciones</h5>
-        <!-- Contenido adicional aquí -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-4">Accede a las configuraciones</h5>
+                    <img src="{{ url_for('static', filename='images/admin.jpg') }}" alt="Imagen de configuración" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

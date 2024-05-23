@@ -8,7 +8,7 @@
             <div class="text-center mb-4">
                 <!-- Espacio para imagen grande -->
                 <!-- Reemplaza esta etiqueta con la imagen que desees -->
-                <img src="tu_imagen.jpg" alt="Perfil" class="rounded-circle" style="width: 100px;">
+                <img src="{{ url_for('static', filename='images/perfil_estudiante.png') }}" alt="Perfil" class="rounded-circle" style="width: 150px;">
             </div>
             <p class="card-text"><strong>Usuario:</strong> {{ docente.username }}</p>
             <p class="card-text"><strong>Documento:</strong> {{ docente.documento }}</p>
