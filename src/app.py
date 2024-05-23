@@ -6,6 +6,7 @@ from bson import ObjectId
 import gridfs
 from informacion import *
 from config import *
+import bcrypt
 
 con_bd = Conexion()
 app = Flask(__name__)
@@ -23,6 +24,7 @@ ROLES = {
 fs = gridfs.GridFS(con_bd)
 colection_informacion = con_bd['Informacion']
 informacion = colection_informacion.find_one()
+
 if informacion:
     texto_quienes_somos = informacion.get('quienes_somos', 'Información no disponible')
     texto_telefono =informacion.get('telefono', 'Información no disponible')
@@ -48,7 +50,8 @@ def registro():
         colection_estudiantes = con_bd['Estudiantes']
         if request.method == 'POST':
             username = request.form['username']
-            password = request.form['password']
+            passwordsin = request.form['password']
+            password = bcrypt.hashpw(passwordsin.encode('utf-8'), bcrypt.gensalt())
             role = request.form['role']
             nombre = request.form['nombre']
             documento = request.form['documento']
@@ -82,8 +85,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = colection_usuarios.find_one({'username': username, 'password': password})
-        if user:
+        user = colection_usuarios.find_one({'username': username})
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             session['user'] = {key: str(value) if isinstance(value, ObjectId) else value for key, value in user.items()}
             role = user.get('role')
             if role == "admin":
