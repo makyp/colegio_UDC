@@ -42,37 +42,39 @@ def index():
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
-    colection_usuarios = con_bd['Usuarios']
-    colection_docentes = con_bd['Docentes']
-    colection_estudiantes = con_bd['Estudiantes']
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        role = request.form['role']
-        nombre = request.form['nombre']
-        documento = request.form['documento']
-        correo = request.form['correo']
-        telefono = request.form['telefono']
-        materias = request.form.getlist('materias')
-        grado = request.form.get('grado')
-        if username and password and role:
-            if role == 'profesor':
-                materias = request.form.getlist('materias')
-                objeto_usuario = Usuario(username, password, role, nombre, materias=materias)
-                objeto_docente = Docente(username, role, nombre, documento, correo, telefono, materias=materias)
-                colection_docentes.insert_one(objeto_docente.fomato_doc())
+    if 'user' in session and session['user']['role'] == "admin":
+        colection_usuarios = con_bd['Usuarios']
+        colection_docentes = con_bd['Docentes']
+        colection_estudiantes = con_bd['Estudiantes']
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            role = request.form['role']
+            nombre = request.form['nombre']
+            documento = request.form['documento']
+            correo = request.form['correo']
+            telefono = request.form['telefono']
+            materias = request.form.getlist('materias')
+            grado = request.form.get('grado')
+            if username and password and role:
+                if role == 'profesor':
+                    materias = request.form.getlist('materias')
+                    objeto_usuario = Usuario(username, password, role, nombre, materias=materias)
+                    objeto_docente = Docente(username, role, nombre, documento, correo, telefono, materias=materias)
+                    colection_docentes.insert_one(objeto_docente.fomato_doc())
 
-            elif role == 'estudiante':
-                grado = request.form.get('grado', 'no asignado')
-                objeto_usuario = Usuario(username, password, role, nombre, grado)
-                objeto_estudiante = Estudiante(username, role, nombre, documento, correo, telefono, grado)
-                colection_estudiantes.insert_one(objeto_estudiante.fomato_doc())
-            else:
-                objeto_usuario = Usuario(username, password, role , nombre)     
-            colection_usuarios.insert_one(objeto_usuario.formato_doc())            
-            return redirect(url_for('admin_dashboard'))
-    return render_template('inicio_sesion/registro.html')
-
+                elif role == 'estudiante':
+                    grado = request.form.get('grado', 'no asignado')
+                    objeto_usuario = Usuario(username, password, role, nombre, grado)
+                    objeto_estudiante = Estudiante(username, role, nombre, documento, correo, telefono, grado)
+                    colection_estudiantes.insert_one(objeto_estudiante.fomato_doc())
+                else:
+                    objeto_usuario = Usuario(username, password, role , nombre)     
+                colection_usuarios.insert_one(objeto_usuario.formato_doc())            
+                return redirect(url_for('admin_dashboard'))
+        return render_template('inicio_sesion/registro.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -142,52 +144,46 @@ def editar_informacion_colegio():
     
 @app.route('/admin_users', methods=['GET', 'POST'])
 def admin_users():
-    collection_usuarios = con_bd['Usuarios']
-    collection_docentes = con_bd['Docentes']
-    collection_estudiantes = con_bd['Estudiantes']
-    if request.method == 'POST':
-        username = request.form['username']
-        usuario = collection_usuarios.find_one({'username': username})
-        if usuario:
-            update_fields = {}
-            if usuario['role'] == 'profesor':
-                materias = request.form.getlist('materias')
-                update_fields['materias'] = materias
-                collection_docentes.update_one({'username': username}, {'$set': {'materias': materias}})                
-            elif usuario['role'] == 'estudiante':
-                grado = request.form.get('grado', 'no asignado')
-                update_fields['grado'] = grado
-                collection_estudiantes.update_one({'username': username}, {'$set': {'grado': grado}})
+    if 'user' in session and session['user']['role'] == "admin":
+        collection_usuarios = con_bd['Usuarios']
+        collection_docentes = con_bd['Docentes']
+        collection_estudiantes = con_bd['Estudiantes']
+        if request.method == 'POST':
+            username = request.form['username']
+            usuario = collection_usuarios.find_one({'username': username})
+            if usuario:
+                update_fields = {}
+                if usuario['role'] == 'profesor':
+                    materias = request.form.getlist('materias')
+                    update_fields['materias'] = materias
+                    collection_docentes.update_one({'username': username}, {'$set': {'materias': materias}})                
+                elif usuario['role'] == 'estudiante':
+                    grado = request.form.get('grado', 'no asignado')
+                    update_fields['grado'] = grado
+                    collection_estudiantes.update_one({'username': username}, {'$set': {'grado': grado}})
 
-            collection_usuarios.update_one({'username': username}, {'$set': update_fields})    
-        return redirect(url_for('admin_users'))
-    filter = request.args.get('filter', 'all')
-    if filter == 'all':
-        usuarios = list(collection_usuarios.find())
+                collection_usuarios.update_one({'username': username}, {'$set': update_fields})    
+            return redirect(url_for('admin_users'))
+        filter = request.args.get('filter', 'all')
+        if filter == 'all':
+            usuarios = list(collection_usuarios.find())
+        else:
+            usuarios = list(collection_usuarios.find({'role': filter}))
+        return render_template('admin/admin_users.html', usuarios=usuarios, filter=filter)
     else:
-        usuarios = list(collection_usuarios.find({'role': filter}))
-    return render_template('admin/admin_users.html', usuarios=usuarios, filter=filter)
-
+        return redirect(url_for('login'))
+    
 @app.route('/delete_user/<username>', methods=['GET', 'POST'])
 def delete_user(username):
     if 'user' in session and session['user']['role'] == "admin":
         collection_usuarios = con_bd['Usuarios']
         collection_docentes = con_bd['Docentes']
         collection_estudiantes = con_bd['Estudiantes']
-        
-        # Buscar el usuario por su nombre de usuario en la colección de Usuarios
         usuario = collection_usuarios.find_one({'username': username})
-        
         if usuario:
-            # Eliminar al usuario de la colección de Docentes si es un profesor
             collection_docentes.delete_one({'username': username})
-            
-            # Eliminar al usuario de la colección de Estudiantes si es un estudiante
             collection_estudiantes.delete_one({'username': username})
-            
-            # Eliminar al usuario de la colección de Usuarios
             collection_usuarios.delete_one({'username': username})
-        
         return redirect(url_for('admin_users'))
     else:
         return redirect(url_for('login'))
@@ -212,24 +208,24 @@ def admin_eventos():
 
 @app.route('/ver_perfiles')
 def ver_perfiles():
-    collection_docentes = con_bd['Docentes']
-    collection_estudiantes = con_bd['Estudiantes']
+    if 'user' in session and session['user']['role'] == "admin":
+        collection_docentes = con_bd['Docentes']
+        collection_estudiantes = con_bd['Estudiantes']
 
-    filtro_tipo = request.args.get('tipo', 'all')
+        filtro_tipo = request.args.get('tipo', 'all')
 
-    if filtro_tipo == 'docentes':
-        docentes = list(collection_docentes.find())
-        estudiantes = []
-    elif filtro_tipo == 'estudiantes':
-        docentes = []
-        estudiantes = list(collection_estudiantes.find())
+        if filtro_tipo == 'docentes':
+            docentes = list(collection_docentes.find())
+            estudiantes = []
+        elif filtro_tipo == 'estudiantes':
+            docentes = []
+            estudiantes = list(collection_estudiantes.find())
+        else:
+            docentes = list(collection_docentes.find())
+            estudiantes = list(collection_estudiantes.find())
+        return render_template('admin/ver_perfiles.html', docentes=docentes, estudiantes=estudiantes, filtro_tipo=filtro_tipo)
     else:
-        docentes = list(collection_docentes.find())
-        estudiantes = list(collection_estudiantes.find())
-
-    return render_template('admin/ver_perfiles.html', docentes=docentes, estudiantes=estudiantes, filtro_tipo=filtro_tipo)
-
-from flask import request
+        return redirect(url_for('login'))
 
 @app.route('/ver_calificaciones', methods=['GET', 'POST'])
 def ver_calificaciones():
@@ -279,6 +275,7 @@ def eliminar_evento(evento_id):
         return redirect(url_for('admin_eventos'))
     else:
         return redirect(url_for('login'))
+#Rutas para la pagina principal
 @app.route('/eventos')
 def eventos():
     colection_eventos = con_bd['Eventos']
@@ -306,7 +303,6 @@ def upload_file():
         else:
             return "No se pudo cargar el archivo"
     return render_template('admin/upload.html')
-
 
 @app.route('/archivos')
 def listar_archivos():
@@ -350,48 +346,59 @@ def mision():
 @app.route('/vision')
 def vision():
     return render_template('vision.html', vision={'texto': texto_vision},telefono={'texto': texto_telefono}, email ={'texto': texto_email} )
-##Lo de profesor
+#Lo de profesor
 @app.route('/profesor_dashboard')
 def profesor_dashboard():
-    return render_template('profesor/profesor_dashboard.html')
+    if 'user' in session and session['user']['role'] == "profesor":
+        return render_template('profesor/profesor_dashboard.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/ver_perfil_docente/<username>')
 def ver_perfil_docente(username):
-    collection_docentes = con_bd['Docentes']
-    docente = collection_docentes.find_one({"username": username})
-    if docente:
-        return render_template('profesor/ver_perfil_docente.html', docente=docente)
+    if 'user' in session and session['user']['role'] == "profesor":
+        collection_docentes = con_bd['Docentes']
+        docente = collection_docentes.find_one({"username": username})
+        if docente:
+            return render_template('profesor/ver_perfil_docente.html', docente=docente)
+        else:
+            return "Docente no encontrado", 404
     else:
-        return "Docente no encontrado", 404
+        return redirect(url_for('login'))
 
 @app.route('/editar_perfil_docente/<username>', methods=['GET', 'POST'])
 def editar_perfil_docente(username):
-    collection_docentes = con_bd['Docentes']
-    docente = collection_docentes.find_one({"username": username})
-    if request.method == 'POST':
-        correo = request.form['correo']
-        telefono = request.form['telefono']
-        collection_docentes.update_one(
-            {"username": username},
-            {"$set": {
-                "correo": correo,
-                "telefono": telefono
-            }}
-        )
-        flash('¡Los datos se actualizaron correctamente!', 'success')
-        return redirect(url_for('editar_perfil_docente', username=username)) 
-    return render_template('profesor/editar_perfil_docente.html', docente=docente)
+    if 'user' in session and session['user']['role'] == "profesor":
+        collection_docentes = con_bd['Docentes']
+        docente = collection_docentes.find_one({"username": username})
+        if request.method == 'POST':
+            correo = request.form['correo']
+            telefono = request.form['telefono']
+            collection_docentes.update_one(
+                {"username": username},
+                {"$set": {
+                    "correo": correo,
+                    "telefono": telefono
+                }}
+            )
+            flash('¡Los datos se actualizaron correctamente!', 'success')
+            return redirect(url_for('editar_perfil_docente', username=username)) 
+        return render_template('profesor/editar_perfil_docente.html', docente=docente)
+    else:
+        return redirect(url_for('login'))
+    
 @app.route('/ver_estudiantes')
 def ver_estudiantes():
-    collection_estudiantes = con_bd['Estudiantes']
-    grado_filter = request.args.get('grado_filter')  # Obtener el filtro por grado de la solicitud GET
-    
-    if grado_filter and grado_filter != 'all':
-        estudiantes = list(collection_estudiantes.find({'grado': grado_filter}))  # Filtrar por grado si se proporciona
+    if 'user' in session and session['user']['role'] == "profesor":
+        collection_estudiantes = con_bd['Estudiantes']
+        grado_filter = request.args.get('grado_filter')
+        if grado_filter and grado_filter != 'all':
+            estudiantes = list(collection_estudiantes.find({'grado': grado_filter}))
+        else:
+            estudiantes = list(collection_estudiantes.find())
+        return render_template('profesor/ver_estudiantes.html', estudiantes=estudiantes)
     else:
-        estudiantes = list(collection_estudiantes.find())  # Si no hay filtro, obtener todos los estudiantes
-    
-    return render_template('profesor/ver_estudiantes.html', estudiantes=estudiantes)
+        return redirect(url_for('login'))
 
 @app.route('/asignar_calificacion', methods=['GET', 'POST'])
 def asignar_calificacion():
@@ -454,10 +461,12 @@ def eliminar_nota(nota_id):
     else:
         return redirect(url_for('login'))
 
-
 @app.route('/estudiante_dashboard')
 def estudiante_dashboard():
-    return render_template('estudiante/estudiante_dashboard.html')
+    if 'user' in session and session['user']['role'] == "estudiante":
+        return render_template('estudiante/estudiante_dashboard.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/ver_notas')
 def ver_notas():
@@ -465,16 +474,13 @@ def ver_notas():
         collection_asignaturas = con_bd['Asignaturas']
         collection_docentes = con_bd['Docentes']
         estudiante_username = session['user']['nombre']
-
         todas_asignaturas = ['matemáticas', 'español', 'ciencias', 'sociales']
         asignaturas_data = []
         for nombre_asignatura in todas_asignaturas:
             calificacion_asignatura = collection_asignaturas.find_one({'estudiante': estudiante_username, 'asignatura': nombre_asignatura})
             calificacion = calificacion_asignatura['calificacion'] if calificacion_asignatura else 'Sin calificación'
-
             docente_asignado = collection_docentes.find_one({'materias': nombre_asignatura})
             docente_nombre = docente_asignado['nombre'] if docente_asignado else 'Sin asignar'
-
             asignaturas_data.append({
                 'asignatura': nombre_asignatura,
                 'docente': docente_nombre,
@@ -484,40 +490,48 @@ def ver_notas():
     else:
         return redirect(url_for('login'))
 
-
 @app.route('/ver_perfil_estudiante/<username>')
 def ver_perfil_estudiante(username):
-    collection_estudiantes = con_bd['Estudiantes']
-    estudiante = collection_estudiantes.find_one({"username": username})
-    if estudiante:
-        return render_template('estudiante/ver_perfil_estudiante.html', estudiante=estudiante)
+    if 'user' in session and session['user']['role'] == "estudiante":
+        collection_estudiantes = con_bd['Estudiantes']
+        estudiante = collection_estudiantes.find_one({"username": username})
+        if estudiante:
+            return render_template('estudiante/ver_perfil_estudiante.html', estudiante=estudiante)
+        else:
+            return "Estudiante no encontrado", 404
     else:
-        return "Estudiante no encontrado", 404
+        return redirect(url_for('login'))
+  
 @app.route('/editar_perfil_estudiante/<username>', methods=['GET', 'POST'])
 def editar_perfil_estudiante(username):
-    collection_estudiantes = con_bd['Estudiantes']
-    estudiante = collection_estudiantes.find_one({"username": username})
-    if request.method == 'POST':
-        correo = request.form['correo']
-        telefono = request.form['telefono']
-        collection_estudiantes.update_one(
-            {"username": username},
-            {"$set": {
-                "correo": correo,
-                "telefono": telefono
-            }}
-        )
-        flash('¡Los datos se actualizaron correctamente!', 'success')
-        return redirect(url_for('editar_perfil_estudiante', username=username))
-    return render_template('estudiante/editar_perfil_estudiante.html', estudiante=estudiante)
-
+    if 'user' in session and session['user']['role'] == "estudiante":
+        collection_estudiantes = con_bd['Estudiantes']
+        estudiante = collection_estudiantes.find_one({"username": username})
+        if request.method == 'POST':
+            correo = request.form['correo']
+            telefono = request.form['telefono']
+            collection_estudiantes.update_one(
+                {"username": username},
+                {"$set": {
+                    "correo": correo,
+                    "telefono": telefono
+                }}
+                )
+            flash('¡Los datos se actualizaron correctamente!', 'success')
+            return redirect(url_for('editar_perfil_estudiante', username=username))
+        return render_template('estudiante/editar_perfil_estudiante.html', estudiante=estudiante)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/ver_perfiles_docentes')
 def ver_perfiles_docentes():
-    collection_docentes = con_bd['Docentes']
-    docentes = list(collection_docentes.find())
-    return render_template('estudiante/ver_perfiles_docentes.html', docentes=docentes)
-
+    if 'user' in session and session['user']['role'] == "estudiante":
+        collection_docentes = con_bd['Docentes']
+        docentes = list(collection_docentes.find())
+        return render_template('estudiante/ver_perfiles_docentes.html', docentes=docentes)
+    else:
+        return redirect(url_for('login'))
+    
 @app.errorhandler(BuildError)
 def handle_build_error(error):
     return "Error: Could not build URL for endpoint 'dashboard'", 500
