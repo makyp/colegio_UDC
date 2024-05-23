@@ -3,23 +3,27 @@
 {% block header %}<h2 class="text-center">Listado de Estudiantes</h2>{% endblock %}
 {% block content %}
 <div class="container">
+    <!-- Formulario para filtrar por grado -->
     <form action="{{ url_for('ver_estudiantes') }}" method="get" class="mb-3">
         <div class="mb-3">
             <label for="grado_filter" class="form-label">Filtrar por grado:</label>
+            <!-- Selección del grado -->
             <select name="grado_filter" id="grado_filter" class="form-control">
                 <option value="all">Todos</option>
                 <option value="sexto">Sexto</option>
-                <option value="septimo">Septimo</option>
+                <option value="septimo">Séptimo</option>
                 <option value="octavo">Octavo</option>
                 <option value="noveno">Noveno</option>
-                <option value="decimo">Decimo</option>
+                <option value="decimo">Décimo</option>
                 <option value="once">Once</option>
             </select>
         </div>
+        <!-- Botón para enviar el formulario -->
         <button type="submit" class="btn btn-primary">Filtrar</button>
     </form>
+    <!-- Tabla que muestra los estudiantes -->
     <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <table id="table1" class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
                     <th scope="col">Nombre</th>
@@ -30,11 +34,12 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- Iteración sobre cada estudiante para mostrar en la tabla -->
                 {% for estudiante in estudiantes %}
                 <tr>
                     <td>{{ estudiante.nombre }}</td>
                     <td>{{ estudiante.documento }}</td>
-                    <td>{{ estudiante.correo }}</td>
+                    <td>{{ estudiante.cosrreo }}</td>
                     <td>{{ estudiante.telefono }}</td>
                     <td>{{ estudiante.grado }}</td>
                 </tr>
@@ -43,4 +48,26 @@
         </table>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#table1').DataTable({
+            "aLengthMenu": [[3, 5, 10, 25, -1],[3, 5, 10, 25, "All"]],
+            "iDisplayLength": 3,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "search": "Buscar",
+                "zeroRecords": "Ningún registro encontrado",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "Ningún registro disponible",
+                "infoFiltered": "(Filtrado de _MAX_ registro(s) totales)",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}
