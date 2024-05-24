@@ -1,6 +1,5 @@
 import io
 from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file
-from werkzeug.utils import secure_filename
 from werkzeug.routing import BuildError
 from bson import ObjectId
 import gridfs
@@ -477,7 +476,7 @@ def ver_notas():
         collection_asignaturas = con_bd['Asignaturas']
         collection_docentes = con_bd['Docentes']
         estudiante_username = session['user']['nombre']
-        todas_asignaturas = ['matemáticas', 'español', 'ciencias', 'sociales']
+        todas_asignaturas = ['matematicas', 'español', 'ciencias', 'sociales']
         asignaturas_data = []
         for nombre_asignatura in todas_asignaturas:
             calificacion_asignatura = collection_asignaturas.find_one({'estudiante': estudiante_username, 'asignatura': nombre_asignatura})

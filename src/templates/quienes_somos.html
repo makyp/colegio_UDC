@@ -1,22 +1,33 @@
 {% extends "base.html" %}
-{% block title %}Quienes Somos - Colegio UDC{% endblock %}
+{% block title %}Quiénes Somos - Colegio UDC{% endblock %}
 {% block header %}{% endblock %}
 {% block content %}
 <div class="container mt-8">
     <div class="card shadow">
         <div class="card-header">
-            <h2>Quienes Somos</h2>
+            <h2>Quiénes Somos</h2>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <p>{{ quienes_somos.texto }}</p>
+                    <div class="about-us-text">
+                        <p class="text-justify">{{ quienes_somos.texto }}</p>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <img src="{{ url_for('static', filename='images/Quienes_somos.jpg') }}" alt="Quienes Somos" class="img-fluid">
+                    <img src="{{ url_for('static', filename='images/Quienes_somos.jpg') }}" alt="Quiénes Somos" class="img-fluid">
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .about-us-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+</style>
 {% endblock %}

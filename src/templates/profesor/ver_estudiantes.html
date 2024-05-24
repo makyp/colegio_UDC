@@ -18,10 +18,10 @@
                 <option value="once">Once</option>
             </select>
         </div>
-        <!-- Botón para enviar el formulario -->
+        
         <button type="submit" class="btn btn-primary">Filtrar</button>
     </form>
-    <!-- Tabla que muestra los estudiantes -->
+    
     <div class="table-responsive">
         <table id="table1" class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Iteración sobre cada estudiante para mostrar en la tabla -->
+                
                 {% for estudiante in estudiantes %}
                 <tr>
                     <td>{{ estudiante.nombre }}</td>

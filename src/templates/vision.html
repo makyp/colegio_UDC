@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Vision - Colegio UDC{% endblock %}
+{% block title %}Visión - Colegio UDC{% endblock %}
 {% block header %}{% endblock %}
 {% block content %}
 <div class="container mt-8">
@@ -10,13 +10,24 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <p>{{ vision.texto }}</p>
+                    <div class="vision-text">
+                        <p class="text-justify">{{ vision.texto }}</p>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <img src="{{ url_for('static', filename='images/Vision.jpg') }}" alt="Vision" class="img-fluid">
+                    <img src="{{ url_for('static', filename='images/Vision.jpg') }}" alt="Visión" class="img-fluid">
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .vision-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+</style>
 {% endblock %}

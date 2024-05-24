@@ -10,7 +10,9 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <p>{{ mision.texto }}</p>
+                    <div class="mission-text">
+                        <p class="text-justify">{{ mision.texto }}</p>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <img src="{{ url_for('static', filename='images/Mision.jpg') }}" alt="Misión" class="img-fluid">
@@ -19,4 +21,13 @@
         </div>
     </div>
 </div>
+
+<style>
+    .mission-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+</style>
 {% endblock %}
